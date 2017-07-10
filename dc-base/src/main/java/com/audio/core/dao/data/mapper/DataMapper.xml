@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Data">
+
+    <resultMap id="AcessLogMap" type="AcessLog">
+        <id property="id" column="id"/>
+        <result property="uid" column="uid" />
+        <result property="ip" column="ip" />
+        <result property="addtime" column="access_time" />
+        <result property="count" column="count" />
+    </resultMap>
+
+    <resultMap id="AcessStatisticalMap" type="AcessStatistical">
+        <id property="id" column="id"/>
+        <result property="uid" column="uid" />
+        <result property="accessCount" column="access_count" />
+        <result property="addtime" column="add_time" />
+    </resultMap>
+
+    <insert id="saveAccessLog">
+        insert into access_log (uid,ip,access_time)
+        values (#{uid},#{ip},now());
+    </insert>
+
+    <select id="getGroupUidData" resultMap="AcessLogMap">
+        <![CDATA[
+        select count(uid) as `count`,uid,access_time from access_log group by uid
+        having access_time <= #{times}
+        ]]>
+    </select>
+
+    <insert id="addGroupUid"  parameterType="java.util.List" >
+        insert into access_statistical(uid,access_count,add_time)
+        VALUES
+        <foreach collection="list" item="logList" index="logList" separator=",">
+            <![CDATA[
+            (#{logList.uid},
+            #{logList.count},
+            now())
+         ]]>
+        </foreach>
+    </insert>
+
+    <delete id="delLog">
+        <![CDATA[ delete from access_log where access_time <= #{times} ]]>
+    </delete>
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Menu">
+    <resultMap id="MenuMap" type="Menu">
+        <id property="id" column="id"/>
+        <result property="menuName" column="menu_name" />
+        <result property="menuUrl" column="menu_url" />
+        <result property="menuLogo" column="menu_logo" />
+        <result property="whichPortal" column="which_portal" />
+        <result property="parentId" column="parent_id" />
+        <association property="permissionList" column="id"
+                     select="Permission.getAllPermissionByMenuId">
+        </association>
+    </resultMap>
+    <select id="getAllMenu" resultMap="MenuMap">
+        select * from sa_bd_menu
+    </select>
+</mapper>

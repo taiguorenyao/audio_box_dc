@@ -1,0 +1,513 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+
+
+    <resultMap id="InCodeMap" type="InCode">
+        <id property="id" column="id"/>
+        <id property="code" column="code"/>
+        <id property="state" column="state"/>
+        <id property="addtime" column="addtime"/>
+        <id property="account" column="account"/>
+    </resultMap>
+
+    <resultMap id="NoticeMap" type="Notice">
+        <id property="id" column="id"/>
+        <id property="title" column="title"/>
+        <id property="url" column="url"/>
+        <id property="addtime" column="addtime"/>
+    </resultMap>
+
+    <resultMap id="DomainMap" type="Domain">
+        <id property="id" column="id"/>
+        <id property="val" column="val"/>
+        <id property="status" column="status"/>
+        <id property="addtime" column="addtime"/>
+        <id property="txt" column="txt"/>
+    </resultMap>
+
+    <resultMap id="VipadMap" type="vipAd">
+        <id property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="title" column="title"/>
+        <result property="adtitle" column="adtitle"/>
+        <result property="adurl" column="adurl"/>
+        <result property="fontColor" column="fontColor"/>
+        <result property="addtime" column="addtime"/>
+        <result property="size" column="adsize"/>
+        <result property="bgColor" column="bgColor"/>
+    </resultMap>
+
+    <resultMap id="PersonAdEvtMap" type="PersonAdEvt">
+        <id property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="txt_title" column="txt_title"/>
+        <result property="txt_url" column="txt_url"/>
+        <result property="img_url" column="img_url"/>
+        <result property="img_access_url" column="img_access_url"/>
+        <result property="fontcolor" column="fontcolor"/>
+        <result property="xf_img1" column="xf_img1"/>
+        <result property="xf_img2" column="xf_img2"/>
+        <result property="xf_img3" column="xf_img3"/>
+        <result property="xf_url1" column="xf_url1"/>
+        <result property="xf_url2" column="xf_url2"/>
+        <result property="xf_url3" column="xf_url3"/>
+    </resultMap>
+
+    <resultMap id="PersonAviEvtMap" type="PersonAviEvt">
+        <id property="id" column="id"/>
+        <result property="uid" column="uid"/>
+        <result property="title" column="title"/>
+        <result property="url" column="url"/>
+        <result property="addtime" column="addtime"/>
+        <result property="types" column="types"/>
+    </resultMap>
+
+    <resultMap id="ConfigMap" type="Config">
+        <id property="id" column="id"/>
+        <result property="key" column="key"/>
+        <result property="value" column="value"/>
+        <result property="description" column="description"/>
+        <result property="version" column="version"/>
+    </resultMap>
+
+    <resultMap id="UserMap" type="User">
+        <id property="id" column="id"/>
+        <result property="loginName" column="login_name"/>
+        <result property="password" column="password"/>
+        <result property="lastTime" column="last_time"/>
+        <result property="lastIp" column="last_ip"/>
+        <result property="trueName" column="true_name"/>
+        <result property="sex" column="sex"/>
+        <result property="mobile" column="mobile"/>
+        <result property="phone" column="phone"/>
+        <result property="fax" column="fax"/>
+        <result property="email" column="email"/>
+        <result property="status" column="status"/>
+        <result property="regTime" column="reg_time"/>
+        <result property="unreqTime" column="unreq_time"/>
+    </resultMap>
+    <select id="loadUserByLoginname" resultMap="UserMap">
+		select * from sa_info_user where login_name = #{username} and status = '0'
+	</select>
+
+
+    <!--
+    <resultMap id="UserMap" type="User">
+        <id property="id" column="id" />
+        <result property="gid" column="gid" />
+        <result property="username" column="username" />
+        <result property="lastLoginAt" column="last_login_at" />
+
+        <association property="group" column="gid" select="UserGroup.findOneById" javaType="UserGroup" />
+    </resultMap>
+
+    <select id="findByFilter" resultMap="UserMap">
+        SELECT * FROM ks_user
+          <if test="null != gid">
+          gid > #{gid}
+        </if>
+    </select>
+    -->
+
+
+    <resultMap id="BoxUserMap" type="BoxUser">
+        <id property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="pwd" column="pwd"/>
+        <result property="t_name" column="t_name"/>
+        <result property="phone" column="phone"/>
+        <result property="qq" column="qq"/>
+        <result property="addtime" column="addtime"/>
+        <result property="yqcode" column="yqcode"/>
+        <result property="advip" column="advip"/>
+        <result property="fivela" column="fivela"/>
+        <result property="userInCode" column="userInCode"/>
+        <result property="userInType" column="userInType"/>
+        <result property="up_user" column="up_user"/>
+        <result property="leval" column="leval"/>
+    </resultMap>
+
+    <resultMap id="SysUserMap" type="SysUser">
+        <id property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="pwd" column="pwd"/>
+    </resultMap>
+
+    <select id="loadUserByAccount" resultMap="BoxUserMap">
+		select * from box_user where account = #{account}
+	</select>
+
+    <select id="loadUserById" resultMap="BoxUserMap">
+        select * from box_user where id = #{id}
+    </select>
+
+    <select id="loadUserByCode" resultMap="BoxUserMap">
+        select * from box_user where userInCode = #{userInCode} and userInType = 1
+    </select>
+
+    <select id="getUserDown" resultMap="BoxUserMap">
+        select * from box_user where up_user = #{uid}
+    </select>
+
+
+    <select id="loadSysUserByAccount" resultMap="SysUserMap">
+        select * from sys_user where account = #{account}
+    </select>
+
+    <select id="loadIncode" resultType="java.lang.Integer">
+		select count(*) from incode where code = #{loadIncode} and state = 0
+	</select>
+
+    <insert id="saveBoxuser">
+		insert into box_user(id,account,pwd,t_name,phone,qq,addtime,yqcode,up_user)
+		VALUES
+		(#{id},#{account},#{pwd},#{t_name},#{phone},#{qq},now(),#{yqcode},#{up_user})
+
+	</insert>
+
+    <update id="updateInCode">
+		update incode set state = #{state},account = #{account} where code = #{code}
+
+	</update>
+
+    <select id="getPersonAviListSize" resultType="java.lang.Integer">
+		select count(*) from person_avi where uid = #{uid}
+	</select>
+
+    <select id="getPersonAviList" resultMap="PersonAviEvtMap">
+		select * from person_avi where uid = #{uid} order by addtime desc limit #{curPage},#{pageSize}
+	</select>
+
+    <delete id="delAudio">
+		delete from person_avi where id = #{id}
+	</delete>
+
+    <insert id="addAudio">
+		insert into person_avi(uid,title,url,addtime,types)
+		VALUES
+		(#{uid},#{title},#{url},now(),#{types})
+	</insert>
+
+    <select id="getAllAudio" resultMap="PersonAviEvtMap">
+        select * from person_avi
+    </select>
+
+    <select id="getAllConfig" resultMap="ConfigMap">
+        select * from sys_config order by addtime desc
+    </select>
+
+    <select id="getAllAviById" resultMap="PersonAviEvtMap">
+        select * from person_avi where uid = #{uid}
+    </select>
+
+    <select id="getAllPersonAdById" resultMap="PersonAdEvtMap">
+        select * from person_ad where uid = #{uid}
+    </select>
+
+
+    <select id="getAllPersonAd" resultMap="PersonAdEvtMap">
+        select * from person_ad
+    </select>
+
+    <insert id="addPersonAd" parameterType="PersonAdEvt">
+        insert into person_ad (uid,txt_title,txt_url,img_url,img_access_url,fontcolor
+        ,xf_img1,xf_img2,xf_img3,xf_url1,xf_url2,xf_url3)
+        VALUES (#{uid},#{txt_title},#{txt_url},#{img_url},#{img_access_url},#{fontcolor}
+        ,#{xf_img1},#{xf_img2},#{xf_img3},#{xf_url1},#{xf_url2},#{xf_url3})
+    </insert>
+
+    <update id="updatePersonAd" parameterType="PersonAdEvt">
+         update person_ad set fontcolor=#{fontcolor},txt_title=#{txt_title},txt_url=#{txt_url},img_url=#{img_url},img_access_url=#{img_access_url}
+        <if test="null != xf_img1 and '' != xf_img1">
+          ,xf_img1=#{xf_img1}
+        </if>
+        <if test="null != xf_img2 and '' != xf_img2">
+            ,xf_img2=#{xf_img2}
+        </if>
+        <if test="null != xf_img3 and '' != xf_img3">
+            ,xf_img3=#{xf_img3}
+        </if>
+
+        <if test="null != xf_url1 and '' != xf_url1">
+            ,xf_url1=#{xf_url1}
+        </if>
+
+        <if test="null != xf_url2 and '' != xf_url2">
+            ,xf_url2=#{xf_url2}
+        </if>
+
+        <if test="null != xf_url3 and '' != xf_url3">
+            ,xf_url3=#{xf_url3}
+        </if>
+
+         where uid = #{uid}
+    </update>
+
+    <insert id="addVipad" parameterType="java.util.List">
+        insert into vip_ad
+        (uid,title,adtitle,adurl,fontColor,addtime)
+        values
+        <foreach collection="list" item="viplist" index="viplist" separator=",">
+            <![CDATA[
+            (#{viplist.uid},
+            #{viplist.title},
+            #{viplist.adtitle},
+            #{viplist.adurl},
+            #{viplist.fontColor},
+            now())
+         ]]>
+        </foreach>
+    </insert>
+
+    <select id="getAllvipadByUid" resultMap="VipadMap">
+        select * from vip_ad where uid = #{uid}
+    </select>
+
+    <update id="updateVipad" parameterType="vipAd">
+        update vip_ad set adtitle=#{adtitle},adurl=#{adurl},fontColor=#{fontColor},adsize=#{size},bgColor=#{bgColor} where id = #{id}
+    </update>
+
+    <select id="getAllvipad" resultMap="VipadMap">
+        select * from vip_ad
+    </select>
+
+    <insert id="addInCode" parameterType="InCode">
+        insert into incode (code,state,addtime)
+        VALUES (#{code},0,now())
+    </insert>
+
+    <select id="getInCodeListSize" resultType="java.lang.Integer">
+        select count(*) from incode
+    </select>
+
+    <select id="getInCodeList" resultMap="InCodeMap">
+        select * from incode order by addtime desc limit #{curPage},#{pageSize}
+    </select>
+
+
+    <select id="loadBoxUserById" resultMap="BoxUserMap">
+        select * from box_user where id= #{uid}
+    </select>
+
+    <select id="getUserListSize" resultType="java.lang.Integer">
+        select count(*) from box_user
+        <if test="null != keyword and '' != keyword">
+            where
+            account like CONCAT('%',#{keyword},'%')
+            or phone like CONCAT('%',#{keyword},'%')
+            or qq like CONCAT('%',#{keyword},'%')
+            or up_user like CONCAT('%',#{keyword},'%')
+        </if>
+
+    </select>
+
+    <select id="getUserList" resultMap="BoxUserMap">
+        select * from box_user
+
+        <if test="null != keyword and '' != keyword">
+        where account like CONCAT('%',#{keyword},'%')
+        or phone like CONCAT('%',#{keyword},'%')
+        or qq like CONCAT('%',#{keyword},'%')
+        or up_user like CONCAT('%',#{keyword},'%')
+        </if>
+
+        order by addtime desc limit #{curPage},#{pageSize}
+    </select>
+
+
+    <select id="aviAdListSize" resultType="java.lang.Integer">
+        select count(*) from vip_ad
+    </select>
+
+    <select id="aviAdList" resultMap="VipadMap">
+        select * from vip_ad order by addtime desc limit #{curPage},#{pageSize}
+    </select>
+
+    <select id="loadConfigById" resultMap="ConfigMap">
+        select * from sys_config where id = #{id}
+    </select>
+
+    <select id="ConfigListSize" resultType="java.lang.Integer">
+        select count(*) from sys_config
+    </select>
+
+    <select id="getUserUnderCount" resultType="java.lang.Integer">
+        select count(*) from box_user where up_user = #{account}
+    </select>
+
+    <select id="DomainListSize" resultType="java.lang.Integer">
+        select count(*) from domains
+    </select>
+
+    <select id="DomainList" resultMap="DomainMap">
+        select * from domains order by status asc limit #{curPage},#{pageSize}
+    </select>
+
+    <select id="NoticeListSize" resultType="java.lang.Integer">
+        select count(*) from notice
+    </select>
+
+    <select id="NoticeList" resultMap="NoticeMap">
+        select * from notice order by addtime desc limit #{curPage},#{pageSize}
+    </select>
+
+
+    <select id="DomainListCenterSize" resultType="java.lang.Integer">
+        select count(*) from domains_center
+    </select>
+
+    <select id="DomainListCenter" resultMap="DomainMap">
+        select * from domains_center order by status asc limit #{curPage},#{pageSize}
+    </select>
+
+
+    <insert id="addDomain" parameterType="Domain">
+        insert into domains (val,addtime,status,txt)
+        values (#{val},now(),#{status},#{txt});
+    </insert>
+
+    <insert id="addDomainCenter" parameterType="Domain">
+        insert into domains_center (val,addtime,status,txt)
+        values (#{val},now(),#{status},#{txt});
+    </insert>
+
+    <select id="ConfigList" resultMap="ConfigMap">
+        select * from sys_config order by addtime desc limit #{curPage},#{pageSize}
+    </select>
+
+    <update id="updateUserByid">
+        update box_user set advip = #{advip},fivela = #{fivela},userInType = #{userInType}
+        <if test="leval != null and leval != ''">,leval = #{leval} </if>
+        where id = #{id}
+    </update>
+
+    <update id="updateUserIncodeByid">
+        update box_user set userInCode = #{userInCode},userInType = #{userInType},leval = 1 where id = #{id}
+    </update>
+
+    <insert id="addConfig" parameterType="Config">
+        insert into sys_config (`key`,`value`,description,addtime) values (#{key},#{value},#{description},now());
+    </insert>
+
+    <insert id="addNotice" parameterType="Notice">
+        insert into notice (title,url,addtime) values (#{title},#{url},now());
+    </insert>
+
+    <update id="updateConfig">
+        update sys_config set `key`=#{key},`value`= #{value},description=#{description}
+        where id = #{id}
+    </update>
+
+    <delete id="delConfig">
+         delete from sys_config where id = #{id}
+    </delete>
+
+    <delete id="delNotice">
+        delete from notice where id = #{id}
+    </delete>
+
+
+    <delete id="delPersonAviall">
+        delete from person_avi
+    </delete>
+
+    <delete id="delAllAudioByuid">
+        delete from person_avi where uid = #{id}
+    </delete>
+
+
+
+    <delete id="delDomain">
+        delete from domains where id = #{id}
+    </delete>
+
+    <delete id="delDomainCenter">
+        delete from domains_center where id = #{id}
+    </delete>
+
+    <delete id="delUser">
+        delete from box_user where id = #{uid}
+    </delete>
+
+    <delete id="delPersonAvi">
+        delete from person_avi where id in (${id})
+    </delete>
+
+
+
+    <select id="getCurDomain" resultMap="DomainMap">
+        select * from domains where status = 0 limit 1
+    </select>
+
+    <select id="getCurDomainCenter" resultMap="DomainMap">
+        select * from domains_center where status = 0 limit 1
+    </select>
+
+    <select id="getByDomain" resultMap="DomainMap">
+        select * from domains where status = 2 limit 1
+    </select>
+
+    <select id="getByDomainCenter" resultMap="DomainMap">
+        select * from domains_center where status = 2 limit 1
+    </select>
+
+    <update id="updateDoMain_1">
+        update domains set txt=#{txt} where id = #{id}
+    </update>
+
+    <update id="updateDoMain_center_1">
+        update domains_center set txt=#{txt} where id = #{id}
+    </update>
+
+    <update id="updateDoMain_2">
+       update domains set status=#{status},txt=#{txt} where id = #{id}
+    </update>
+
+
+    <update id="updateDoMain_center_2">
+        update domains_center set status=#{status},txt=#{txt} where id = #{id}
+    </update>
+
+    <update id="updateDoMain_3">
+        update domains set status=#{status},txt=#{txt},nodeTxt=#{nodeTxt} where id = #{id}
+    </update>
+
+    <update id="updateDoMain_center_3">
+        update domains_center set status=#{status},txt=#{txt},nodeTxt=#{nodeTxt} where id = #{id}
+    </update>
+
+    <update id="updateConfig_Domain">
+        update sys_config set `value`= #{value} where `key`=#{key}
+    </update>
+
+
+    <delete id="deldomains">
+        delete from domains where id in (${id})
+    </delete>
+
+    <delete id="deldomains_center">
+        delete from domains_center where id in (${id})
+    </delete>
+
+    <select id="getTopNotice" resultMap="NoticeMap">
+        select * from notice order by addtime desc limit #{count}
+    </select>
+
+
+    <insert id="addAudioMaxs"  parameterType="java.util.List" >
+        insert into person_avi(uid,title,url,addtime,types)
+        VALUES
+        <foreach collection="list" item="aviList" index="aviList" separator=",">
+            <![CDATA[
+            (#{aviList.uid},
+            #{aviList.title},
+            #{aviList.url},
+            now(),
+            #{aviList.types})
+         ]]>
+        </foreach>
+    </insert>
+
+</mapper>

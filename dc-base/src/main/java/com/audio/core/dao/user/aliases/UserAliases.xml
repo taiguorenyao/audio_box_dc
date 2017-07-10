@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+"/WEB-INF/schema/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<typeAlias alias="User" type="com.audio.core.entity.User" />
+		<typeAlias alias="BoxUser" type="com.audio.core.entity.BoxUser" />
+		<typeAlias alias="SysUser" type="com.audio.core.entity.SysUser" />
+		<typeAlias alias="UserRole" type="com.audio.core.entity.UserRole" />
+		<typeAlias alias="PersonAviEvt" type="com.audio.core.entity.PersonAviEvt" />
+		<typeAlias alias="PersonAdEvt" type="com.audio.core.entity.PersonAdEvt" />
+		<typeAlias alias="Config" type="com.audio.core.entity.Config" />
+		<typeAlias alias="vipAd" type="com.audio.core.entity.vipAd" />
+		<typeAlias alias="InCode" type="com.audio.core.entity.InCode" />
+		<typeAlias alias="Domain" type="com.audio.core.entity.Domain" />
+		<typeAlias alias="Notice" type="com.audio.core.entity.Notice" />
+	</typeAliases>
+</configuration>

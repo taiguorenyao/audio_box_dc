@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/security
+    http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+
+    <security:http pattern="/" security="none"/>
+    <security:http pattern="/favicon.ico" security="none"/>
+    <security:http pattern="/security/**" security="none"/>
+    <security:http pattern="/login" security="none"/>
+    <security:http pattern="/logout" security="none"/>
+    <security:http pattern="/register" security="none"/>
+    <security:http pattern="/toReg" security="none"/>
+    <security:http pattern="/accessdenied" security="none"/>
+
+    <security:http use-expressions="true" entry-point-ref="authenticationEntryPoint">
+        <security:csrf disabled="true"/>
+        <!--<security:remember-me remember-me-parameter="rememberMe" use-secure-cookie="true"/>-->
+        <security:intercept-url pattern="/*" access="isAuthenticated()"/>
+        <!--<security:intercept-url pattern="/admin/**" access="isAuthenticated()"/>-->
+        <!--<security:intercept-url pattern="/oauth/**" access="isAuthenticated()"/>-->
+
+        <!-- 认证和授权 -->
+
+        <security:custom-filter before="FILTER_SECURITY_INTERCEPTOR" ref="authorizationFilter"/>
+        <security:custom-filter position="FORM_LOGIN_FILTER" ref="authenticationFilter"/>
+
+        <!-- 没有权限的 跳这 -->
+        <security:access-denied-handler ref="accessDeniedHandler"/>
+        <!-- 会话管理  保准用户只能登录一次-->
+        <security:session-management invalid-session-url="/j_spring_security_logout"
+                                     session-authentication-error-url="/j_spring_security_logout">
+            <security:concurrency-control max-sessions="100" error-if-maximum-exceeded="false"/>
+        </security:session-management>
+        <!-- 登出管理 -->
+        <security:logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/"/>
+    </security:http>
+
+    <!-- 未登录的切入点 -->
+    <bean id="authenticationEntryPoint" class="com.audio.security.AuthenticationEntryPoint">
+        <constructor-arg name="loginFormUrl" value="/login"/>
+    </bean>
+    <!-- 没有权限的 跳这 -->
+    <bean id="accessDeniedHandler" class="com.audio.security.handler.AccessDeniedHandler">
+        <property name="accessDeniedUrl" value="/accessdenied"/>
+    </bean>
+
+
+    <bean id="authenticationSuccessHandler"
+          class="com.audio.security.handler.AuthenticationSuccessHandler">
+        <property name="defaultTargetUrl" value="/"/>
+        <property name="useReferer" value="true"/>
+    </bean>
+    <bean id="authenticationFailureHandler"
+          class="com.audio.security.handler.AuthenticationFailureHandler">
+        <property name="defaultFailureUrl" value="/j_spring_security_logout"/>
+    </bean>
+    <bean id="accessDecisionManager" class="com.audio.security.AccessDecisionManager"/>
+    <bean id="securityMetadataSource" class="com.audio.security.MetadataSourceService"/>
+
+
+    <!-- 登录验证器：用户有没有登录的资格 -->
+    <bean id="authenticationFilter" class="com.audio.security.AuthenticationFilter">
+        <property name="usernameParameter" value="j_username"/>
+        <property name="passwordParameter" value="j_password"/>
+        <property name="validateCodeTarget" value="validateCode"/>
+        <property name="useValidateCode" value="false"/>
+        <property name="filterProcessesUrl" value="/j_spring_security_check"/>
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="authenticationSuccessHandler" ref="authenticationSuccessHandler"/>
+        <property name="authenticationFailureHandler" ref="authenticationFailureHandler"/>
+    </bean>
+
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider ref="authenticationProvider"/>
+    </security:authentication-manager>
+    <bean id="authenticationProvider" class="com.audio.security.AuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailService"/>
+        <property name="hideUserNotFoundExceptions" value="false"/>
+        <property name="passwordEncoder" ref="passwordEncoder"/>
+        <property name="saltSource" ref="saltSourceProvider"/>
+    </bean>
+    <bean id="userDetailService" class="com.audio.security.UserDetailService"/>
+    <bean id="passwordEncoder" class="com.audio.security.PasswordEncoderService"/>
+    <bean id="saltSourceProvider" class="com.audio.security.SaltSourceProvider"/>
+
+
+    <!-- 认证过滤器：判断用户有没有访问特定资源的权限 -->
+    <bean id="authorizationFilter" class="com.audio.security.AuthorizationFilter">
+        <!-- 用户拥有的权限 -->
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <!-- 用户是否拥有所请求资源的权限 -->
+        <property name="accessDecisionManager" ref="accessDecisionManager"/>
+        <!-- 资源与权限对应关系 -->
+        <property name="securityMetadataSource" ref="securityMetadataSource"/>
+    </bean>
+</beans>

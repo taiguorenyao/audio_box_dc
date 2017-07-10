@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	metadata-complete="true" version="3.0">
+
+	<display-name>audio</display-name>
+	<welcome-file-list>
+		<welcome-file>/index.jsp</welcome-file>
+	</welcome-file-list>
+
+	<mime-mapping>
+		<extension>wsdl</extension>
+		<mime-type>application/xml</mime-type>
+	</mime-mapping>
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/favicon.ico</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/bundles/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/static/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/vendor/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/upload/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/assets/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>/public/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.css</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.swf</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.zip</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.gif</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.jpg</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.png</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.js</url-pattern>
+	</servlet-mapping>
+
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:conf/zmos-log4j.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:conf/zmos-applicationContext.xml
+		</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+
+
+	<!-- 数据统计 -->
+	<listener>
+		<listener-class>com.audio.task.AutoDataCalculationTask</listener-class>
+	</listener>
+	<!-- 自动检测
+        <listener>
+            <listener-class>com.audio.task.AutoDomainTask</listener-class>
+        </listener>-->
+
+	<context-param>
+		<param-name>defaultHtmlEscape</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<!-- Spring Security Filter Chain
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>-->
+
+	<!-- <listener> <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class> 
+		</listener> -->
+
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--
+	<filter>
+		<filter-name>wxfilter</filter-name>
+		<filter-class>com.audio.filter.WxKeyUtilFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>wxfilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> -->
+
+	<filter>
+		<filter-name>mpfilter</filter-name>
+		<filter-class>com.audio.commons.filter.MPFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>mpfilter</filter-name>
+		<url-pattern>/play/player/*</url-pattern>
+	</filter-mapping>
+
+	<!--
+	<filter>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+		<init-param>
+			<param-name>logLevel</param-name>
+			<param-value>WARN</param-value>
+		</init-param>
+		<init-param>
+			<param-name>statusEnabled</param-name>
+			<param-value>false</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlRewriteFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+	-->
+	
+	<!--  移除HTML输出中的多余空格和换行
+ 	<filter>
+        <filter-name>kernelstudioWhitespaceFilter</filter-name>
+        <filter-class>com.kernelstudio.component.springmvc.filter.WhitespaceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>kernelstudioWhitespaceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    -->
+    
+    <!-- 安全过滤 xss跨站攻击/csrf请求伪造攻击过滤-->
+    <!--
+	<filter>
+		<filter-name>kernelstudioApplicationXssFilterChain</filter-name>
+		<filter-class>com.kernelstudio.component.springmvc.security.xss.XssFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>kernelstudioApplicationXssFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+    -->
+
+	<servlet>
+		<servlet-name>applicationDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>throwExceptionIfNoHandlerFound</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:conf/zmos-spring-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>applicationDispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- 提供验证码服务 -->
+	<servlet>
+		<servlet-name>cuapCode</servlet-name>
+		<servlet-class>com.audio.commons.code.CaptchaCodeServlet</servlet-class>
+		<init-param>
+			<param-name>size</param-name>a
+			<param-value>4</param-value>
+		</init-param>
+		<init-param>
+			<param-name>width</param-name>
+			<param-value>61</param-value>
+		</init-param>
+		<init-param>
+			<param-name>height</param-name>
+			<param-value>17</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>cuapCode</servlet-name>
+		<url-pattern>/security/cuapCode</url-pattern>
+	</servlet-mapping>
+	<!--
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.module.sitemesh.filter.PageFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemesh</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+
+	<servlet>
+		<description>System init when portal start</description>
+		<display-name>StartupServlet</display-name>
+		<servlet-name>StartupServlet</servlet-name>
+		<servlet-class>com.audio.commons.startup.StartupServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<!--
+	<servlet>
+		<servlet-name>validateCodeServlet</servlet-name>
+		<servlet-class>com.kernelstudio.component.security.validation.ValidateCodeServlet</servlet-class>
+		<init-param>
+			<param-name>width</param-name>
+			<param-value>140</param-value>
+		</init-param>
+		<init-param>
+			<param-name>height</param-name>
+			<param-value>40</param-value>
+		</init-param>
+		<init-param>
+			<param-name>codeCount</param-name>
+			<param-value>6</param-value>
+		</init-param>
+		<init-param>
+			<param-name>lineCount</param-name>
+			<param-value>100</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>validateCodeServlet</servlet-name>
+		<url-pattern>/security/validate/code</url-pattern>
+	</servlet-mapping>
+	-->
+
+	<!-- session timeout -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<!--
+	<error-page>
+		<exception-type>java.lang.Throwable</exception-type>
+		<location>/WEB-INF/views/jsp/error/500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>400</error-code>
+		<location>/WEB-INF/views/jsp/error/400.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>403</error-code>
+		<location>/WEB-INF/views/jsp/error/403.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>404</error-code>
+		<location>/WEB-INF/views/jsp/error/404.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>405</error-code>
+		<location>/WEB-INF/views/jsp/error/405.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>500</error-code>
+		<location>/WEB-INF/views/jsp/error/500.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>502</error-code>
+		<location>/WEB-INF/views/jsp/error/502.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>503</error-code>
+		<location>/WEB-INF/views/jsp/error/503.jsp</location>
+	</error-page>
+	<error-page>
+		<error-code>504</error-code>
+		<location>/WEB-INF/views/jsp/error/505.jsp</location>
+	</error-page>
+	-->
+</web-app>

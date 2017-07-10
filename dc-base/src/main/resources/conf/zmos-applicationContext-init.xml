@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 系统启动加载配置，系统启动时将按照顺序逐个启动配置的类。 -->
+    <bean id="startup" class="com.audio.commons.startup.CoreStartUp">
+        <property name="mgmtList">
+            <list>
+                <ref bean="configMgmt"/>
+                <!-- 角色缓存用到权限缓存，必须在权限缓存后初始化
+                <ref bean="permissionMgmt"/>
+                <ref bean="roleMgmt"/>
+                <ref bean="menuMgmt"/>-->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="configMgmt" class="com.audio.commons.mgmt.ConfigMgmt"></bean>
+    <bean id="roleMgmt" class="com.audio.commons.mgmt.RoleMgmt"></bean>
+    <bean id="permissionMgmt" class="com.audio.commons.mgmt.PermissionMgmt"></bean>
+    <bean id="menuMgmt" class="com.audio.commons.mgmt.MenuMgmt"></bean>
+
+</beans>

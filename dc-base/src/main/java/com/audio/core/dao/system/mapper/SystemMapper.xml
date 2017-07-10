@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="System">
+	<resultMap id="SaBdConfigMap" type="SaBdConfig">
+		<id property="id" column="id"/>
+		<result property="confKey" column="conf_key"/>
+		<result property="confName" column="conf_name"/>
+		<result property="confValue" column="conf_value"/>
+		<result property="confVersion" column="conf_version"/>
+		<result property="changeTime" column="change_time"/>
+		<result property="createTime" column="create_time"/>
+		<result property="remark" column="remark"/>
+	</resultMap>
+	<select id="getSaBdConfig" resultMap="SaBdConfigMap">
+		select * from sa_bd_config
+	</select>
+	<!--
+	<resultMap id="UserMap" type="User">
+		<id property="id" column="id" />
+		<result property="gid" column="gid" />
+		<result property="username" column="username" />
+		<result property="lastLoginAt" column="last_login_at" />
+
+		<association property="group" column="gid" select="UserGroup.findOneById" javaType="UserGroup" />
+	</resultMap>
+
+	<select id="findByFilter" resultMap="UserMap">
+		SELECT * FROM ks_user
+          <if test="null != gid">
+          gid > #{gid}
+        </if>
+	</select>
+	-->
+</mapper>

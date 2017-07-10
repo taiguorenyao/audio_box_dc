@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<decorators defaultdir="/WEB-INF/views">
+	<excludes>
+		<pattern>/login*</pattern>
+	</excludes>
+	<!-- 默认装饰页面, 在需要装饰的页面增加<meta name="decorator" content="default"/> -->
+	<decorator name="head" page="layouts/zoms-head.jsp" />
+	<decorator name="default" page="layouts/zmos-portal.jsp" >
+		<pattern>/*</pattern>
+	</decorator>
+
+</decorators>

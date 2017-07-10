@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Role">
+
+    <resultMap id="roleMap" type="role">
+        <id property="id" column="id"/>
+        <result property="roleName" column="role_name"/>
+        <result property="roleType" column="role_type"/>
+        <result property="remark" column="remark"/>
+        <association property="permissionIds" column="id"
+                     select="getRolePermission">
+        </association>
+    </resultMap>
+
+    <resultMap id="rolePermissionMap" type="rolePermission">
+        <id property="id" column="id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="permissionId" column="permission_id"/>
+    </resultMap>
+    <!--
+    <resultMap id="rolePermissionMap" type="rolePermission">
+        <id property="id" column="id"/>
+        <result property="permissionName" column="permission_name"/>
+        <result property="menuId" column="menu_id"/>
+        <result property="permissionUrl" column="permission_url"/>
+        <result property="permissionType" column="permission_type"/>
+        <result property="permissionStatus" column="permission_status"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    -->
+
+
+    <select id="getAllRole" resultMap="roleMap">
+        select * from sa_bd_role
+    </select>
+
+    <select id="getRolePermission" resultMap="rolePermissionMap">
+        select * from sa_info_rolepermissions where role_id = #{id}
+    </select>
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Permission">
+    <resultMap id="PermissionMap" type="Permission">
+        <id property="id" column="id"/>
+        <result property="permissionName" column="permission_name" />
+        <result property="menuId" column="menu_id" />
+        <result property="permissionType" column="permission_type" />
+        <result property="permissionUrl" column="permission_url" />
+        <result property="permissionStatus" column="permission_status" />
+        <result property="remark" column="remark" />
+    </resultMap>
+    <select id="getAllPermission" resultMap="PermissionMap">
+        select * from sa_bd_permissions where permission_status='1'
+    </select>
+    <select id="getAllPermissionByMenuId" resultMap="PermissionMap">
+        select * from sa_bd_permissions where menu_id = #{id} and permission_status='1'
+    </select>
+</mapper>
